@@ -44,10 +44,15 @@ jobs:
         
     - name: Decode the pfx
       run: |
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.ENCODED_PFX }}")
-        $certificatePath = Join-Path -Path $env:UWP_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
-        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-
+       $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.ENCODED_PFX }}")
+       $certificatePath = Join-Path -Path $env:Solution_Name -ChildPath "GitHubActionsWorkflow.pfx"
+       [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
+       if (Test-Path -Path $certificatePath) {
+       Remove-Item -Path $certificatePath
+       } else {
+       Write-Host "Certificate file not found at path: $certificatePath" 
+       }
+    
     - name: Create the app package
       run: msbuild $env:UWP_Project_Path /p:Configuration=Release /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Never /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.PFX_KEY }}
 
