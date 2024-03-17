@@ -16,7 +16,7 @@ jobs:
     env:
       Solution_Name: coop-compiler.sln
       UWP_Project_Directory: coop-compiler
-      UWP_Project_Path: coop-compiler/coop-compiler.vcxproj
+      UWP_Project_Path: coop-compiler/coop-compiler.csproj
 
     steps:
     - name: Checkout
