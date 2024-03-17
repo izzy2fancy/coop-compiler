@@ -45,12 +45,12 @@ jobs:
     - name: Decode the pfx
       run: |
        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.ENCODED_PFX }}")
-       $certificatePath = Join-Path -Path $env:Solution_Name -ChildPath "GitHubActionsWorkflow.pfx"
+       $certificatePath = "./GitHubActionsWorkflow.pfx"  # Specify the exact path here
        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
        if (Test-Path -Path $certificatePath) {
        Remove-Item -Path $certificatePath
        } else {
-       Write-Host "Certificate file not found at path: $certificatePath" 
+       Write-Host "Certificate file not found at path: $certificatePath"
        }
     
     - name: Create the app package
